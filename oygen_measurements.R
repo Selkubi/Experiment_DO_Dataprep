@@ -19,3 +19,4 @@ ggplot(data_excluded[!(Sample_Name %in% c("S11", "S13", "S13.5", "S15.5", "S17.5
   geom_point(aes(x=Column_Number, y=Oxygen, group=replicate), size=2)+
   facet_grid(~Sample_Name)+
   theme_bw()+ scale_color_manual(values=c("yellow1", "magenta", "green1"))
+read_delim("data/presense/SELIN_O2_recalibrated.txt")
