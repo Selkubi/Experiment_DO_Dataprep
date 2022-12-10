@@ -17,6 +17,22 @@ data[, c("year", "month", "day") := tstrsplit(Date, "-")]
 data_sum=data[,.(Oxygen=median(Value), Temp=median(Temp)), by=c("Column_no",  "day", "month", "Date", "Sample_Name")]
 data_sum[, c("replicate", "Column_Number") := tstrsplit(Column_no, "_")]
 data_excluded=data_sum[!(Sample_Name == "S06"| Sample_Name=="S6.5"| Sample_Name == "S15.7")]
+data_excluded$replicate= factor(data_excluded$replicate, levels = c("F", "C", "B")) #To change th order of plotting so they are not on top of each other in a bad way
+
+ggplot(data_excluded)+
+  geom_line(aes(x=Column_Number, y=Oxygen, group=replicate, col=replicate), lwd=2)+
+  geom_point(aes(x=Column_Number, y=Oxygen, group=replicate), size=2)+
+  facet_grid(~Sample_Name)+
+  theme_bw()+ scale_color_manual(values=c("yellow1", "magenta", "green1"))
+
+# Sample plot with the new calculated F measurements from S11 until S19. 
+#the calculation is done using the Presens software but can also be manually calculated provided that the calibration equation is known.
+# In this case only the C2 values of the F replicate should show different results 
+#(all the F replicate values are recalcualted but C1 and C3 should be quite similar to original values since these had the correct calibration when measuring)
+
+data_sum=data[,.(Oxygen=median(New_Calibration), Temp=median(Temp)), by=c("Column_no",  "day", "month", "Date", "Sample_Name")]
+data_sum[, c("replicate", "Column_Number") := tstrsplit(Column_no, "_")]
+data_excluded=data_sum[!(Sample_Name == "S06"| Sample_Name=="S6.5"| Sample_Name == "S15.7")]
 data_excluded$replicate= factor(data_excluded$replicate, levels = c("F", "C", "B"))
 
 ggplot(data_excluded)+
@@ -24,3 +40,10 @@ ggplot(data_excluded)+
   geom_point(aes(x=Column_Number, y=Oxygen, group=replicate), size=2)+
   facet_grid(~Sample_Name)+
   theme_bw()+ scale_color_manual(values=c("yellow1", "magenta", "green1"))
+
+# The plots are very similar, so we keep the re-calculated measurements
+
+
+
+
+
