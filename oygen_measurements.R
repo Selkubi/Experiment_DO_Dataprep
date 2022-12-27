@@ -2,7 +2,7 @@ library(data.table)
 library(ggplot2)
 
 #Take in the data
-O2_recalibrated <- read.delim("C:/Users/c7701233/Nextcloud/Column-Experiment/oxygen_measurements/Experiment_DO_Dataprep/data/presense/SELIN_O2_recalibrated.txt", header=T)
+O2_recalibrated <- read.delim("data/presense/SELIN_O2_recalibrated.txt", header=T, , fileEncoding="latin1")
 data = setDT(O2_recalibrated[,c("Date", "Time", "Value", "Temp", "Column_no","Sample_Name", "New_Calibration")])
 
 #Set the classes, this is important for the dates as well as the factors (especially in plotting facets this would come handy)
@@ -57,5 +57,5 @@ ggplot(data_excluded)+
   facet_grid(~Sample_Name)+
   theme_bw()+ scale_color_manual(values=c("yellow1", "magenta", "green1"))
 
-
+write.csv2(file="oxygen_sample_data.csv",x=data_excluded[Sample_Name%in%c("S08", "S11","S02","S14", "S17", "S19", "S13")])
 
