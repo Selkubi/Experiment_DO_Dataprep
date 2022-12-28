@@ -3,7 +3,7 @@ library(ggplot2)
 
 #Take in the data
 O2_recalibrated <- read.delim("data/presense/SELIN_O2_recalibrated.txt", header=T, , fileEncoding="latin1")
-data = setDT(O2_recalibrated[,c("Date", "Time", "Value", "Temp", "Column_no","Sample_Name", "New_Calibration")])
+data = setDT(O2_recalibrated[,c("Date", "Time", "Value", "Temp", "Pressure","Column_no","Sample_Name", "New_Calibration")])
 
 #Set the classes, this is important for the dates as well as the factors (especially in plotting facets this would come handy)
 data[,"Date"] = as.Date(data$Date , format= "%m/%d/%Y")
@@ -31,7 +31,7 @@ ggplot(data_sum)+
 #(all the F replicate values are recalcualted but C1 and C3 should be quite similar to original values since these had the correct calibration when measuring)
 # To exclude a holw set of sampling date use data_sum[!(Sample_Name == "S06"| Sample_Name=="S6.5"| Sample_Name == "S15.7")]
 
-data_sum=data[,.(Oxygen=median(New_Calibration), Temp=median(Temp)), by=c("Column_no",  "day", "month", "Date", "Sample_Name")]
+data_sum=data[,.(Oxygen=median(New_Calibration), Temp=median(Temp), Pressure=median(Pressure)), by=c("Column_no",  "day", "month", "Date", "Sample_Name")]
 data_sum[, c("replicate", "Column_Number") := tstrsplit(Column_no, "_")]
 data_sum$replicate= factor(data_sum$replicate, levels = c("F", "C", "B"))
 
@@ -57,5 +57,5 @@ ggplot(data_excluded)+
   facet_grid(~Sample_Name)+
   theme_bw()+ scale_color_manual(values=c("yellow1", "magenta", "green1"))
 
-write.csv2(file="oxygen_sample_data.csv",x=data_excluded[Sample_Name%in%c("S08", "S11","S02","S14", "S17", "S19", "S13")])
+write.csv2(file="oxygen_sample_data.csv",x=data_excluded[Sample_Name%in%c("S08", "S11","S02","S14", "S19", "S13")])
 
