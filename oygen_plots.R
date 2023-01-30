@@ -56,7 +56,7 @@ data_subset$Sample_Name=factor(data_subset$Sample_Name,
                                levels=c("S08", "S13", "S17.5", "S19"),
                                labels=c("Day0", "Day3", "Day10", "Day17"))
 ggplot(data_subset)+
- geom_boxplot(aes(x=Sample_Name, y=Oxygen, color=Sample_Name), lwd=1)+
+ geom_boxplot(aes(x=Sample_Name, y=Oxygen, fill=Sample_Name), lwd=1)+
   facet_grid(~Column_Number)+
   geom_hline(yintercept = c(10.6, 11.1), color="red", linetype="dashed")+
-  theme_bw()+ scale_color_manual(values=c("#bdd5e1", "#a698cc", "#4e8fc8", "#1741a3"))
+  theme_bw()+ scale_fill_manual(values=c("#bdd5e1", "#a698cc", "#4e8fc8", "#1741a3"))
