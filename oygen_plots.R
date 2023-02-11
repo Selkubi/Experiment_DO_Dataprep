@@ -34,7 +34,7 @@ ggplot(data_sum)+
 data_sum=data[,.(Oxygen=median(New_Calibration), Temp=median(Temp), Pressure=median(Pressure)), by=c("Column_no",  "day", "month", "Date", "Sample_Name")]
 data_sum[, c("replicate", "Column_Number") := tstrsplit(Column_no, "_")]
 data_sum$replicate= factor(data_sum$replicate, levels = c("F", "C", "B"))
-data_subset=data_sum[Sample_Name%in%c("S08", "S13", "S17.5", "S19")]
+data_subset=data_sum[Sample_Name%in%c("S08", "S11","S13", "S14.5","S15","S17.5", "S18.5","S19")]
 
 ggplot(data_subset)+
   geom_line(aes(x=Column_Number, y=Oxygen, group=replicate, col=replicate), lwd=2)+
@@ -50,13 +50,13 @@ ggplot(data_subset)+
 write.csv2(file="oxygen_sample_data.csv",x=data_excluded[Sample_Name%in%c("S08",  "S11","S02","S14", "S19", "S13")])
 
 # Reverse plots sample_date~col_no 
+source("plotting_functinos.R")
 data_subset[, lapply(.SD, mean), .SDcols="Oxygen", by=c("Sample_Name", "Column_Number")]
+data_subset=set_coloring_column(data_subset) # write a  new column for the differing color scheme
 
-data_subset$Sample_Name=factor(data_subset$Sample_Name,
-                               levels=c("S08", "S13", "S17.5", "S19"),
-                               labels=c("Day0", "Day3", "Day10", "Day17"))
 ggplot(data_subset)+
- geom_boxplot(aes(x=Sample_Name, y=Oxygen, fill=Sample_Name), lwd=1)+
+ geom_boxplot(aes(x=Sample_Name, y=Oxygen, fill=highlight, color=highlight), lwd=0.5)+
   facet_grid(~Column_Number)+
   geom_hline(yintercept = c(10.6, 11.1), color="red", linetype="dashed")+
-  theme_bw()+ scale_fill_manual(values=c("#bdd5e1", "#a698cc", "#4e8fc8", "#1741a3"))
+  theme_bw()+ fill_col_no()+color_col_no()+oxygen_plots_theme()+
+  label_manual()
