@@ -22,7 +22,7 @@ fill_col_no = function(){
 color_col_no = function(){
   scale_color_manual( name =  "Column Location",
                       #labels=c("Column 1", "Column 2", "Column 3", "Before Reversal"), 
-                      values=c("black", "black", "black", "#a698cc", "#4e8fc8", "#1741a3"),
+                      values=c("black", "black", "black", "#1741a3", "#4e8fc8", "#a698cc"),
                       guide="legend")
 } 
 
@@ -37,8 +37,16 @@ oxygen_plots_theme = function(){
     theme(axis.text = element_text(size=10), 
           axis.title = element_text(size=12), 
           text =  element_text(size=10),
-          axis.text.x = element_text(size=10, angle=45, vjust=0.7))
+          axis.text.x = element_text(size=10, angle=45, vjust=1, hjust=1))
   
   
+}
+
+n_fun = function(x){
+  return(data.frame(y = max(x, na.rm=T), label = paste0(length(x))))
+}                                                      
+
+observation_numbers = function (x) {
+  stat_summary(fun.data = n_fun, geom = "text", na.rm=T, aes(vjust=0))
 }
 
