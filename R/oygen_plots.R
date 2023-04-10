@@ -53,11 +53,15 @@ write.csv2(file = "oxygen_sample_data.csv",x = data_excluded[Sample_Name %in% c(
 source("R/plotting_functinos.R")
 data_subset[, lapply(.SD, mean), .SDcols="Oxygen", by = c("Sample_Name", "Column_Number")]
 data_subset <- set_coloring_column(data_subset) # write a  new column for the differing color scheme
+facet_names = c(C1 = "Column 1", C2 = "Column 2", C3 = "Column 3")
+
+
 
 ggplot(data_subset, aes(x = Sample_Name, y = Oxygen))+
  geom_boxplot(aes(x = Sample_Name, y = Oxygen, fill = highlight, color = highlight), lwd=0.5)+
-  observation_numbers() +
-  facet_grid(~Column_Number) +
+  observation_numbers +
+  facet_grid(~Column_Number, labeller = as_labeller(facet_names)) +
   geom_hline(yintercept = c(10.6, 11.1), color = "red", linetype = "dashed")+
-  oxygen_plots_theme() + fill_col_no()+color_col_no()+
-  label_manual() + ylab("Oxygen (mg/L)") + xlab ("Day")
+  oxygen_plots_theme + fill_col_no +color_col_no +
+  label_manual + ylab("Oxygen (mg/L)") + xlab ("Days")
+
