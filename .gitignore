@@ -6,3 +6,6 @@
 *.txt
 *.csv
 *.xlsx
+data/presense/*.csv
+data/presense/*.txt
+data/presense/*.xlsx
