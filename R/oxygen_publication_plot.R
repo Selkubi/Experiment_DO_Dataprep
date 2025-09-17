@@ -36,8 +36,8 @@ line_segments <- significant_p_values |>
   )
 
 output_time_transformed <- significant_p_values |>
-  inner_join(line_segments, by =  join_by(position == position, contrast == contrast, p.value == p.value, 
-                                          estimate == estimate, SE == SE, t.ratio == t.ratio, df ==df)) |>
+  inner_join(line_segments, by =  c("position" = "position", "contrast" = "contrast", "p.value" = "p.value", 
+                                          "estimate" = "estimate", "SE" = "SE", "t.ratio" = "t.ratio", "df" = "df")) |>
   tidyr::separate(contrast, into = c("group1", "group2"), sep = " - ") |>
   mutate(
     p_symbol = case_when(
@@ -53,17 +53,23 @@ output_time_transformed <- significant_p_values |>
   )
 
 # plot
-ggplot(data_subset, aes(day, Oxygen, group = position, color = position, shape = position)) + 
+oxgen_publication_plot <- ggplot(data_subset, aes(day, Oxygen, group = position, color = position, shape = position)) + 
   #facet_grid(~position) +
   geom_point(size = 1.5, alpha = 0.3, position = pd) + 
   geom_point(data = final, aes(x = day, y = emmean), size = 2, position = pd) +
   geom_linerange(data = model_effects, aes(y = fit, ymin = lower, ymax = upper), show.legend = TRUE, position = pd) +
+  geom_hline(yintercept = c(10.06), color = "red", linetype = "dashed") +
   theme_boxplot() + xlab("Days") + ylab(paste0("Oxygen mg L", '\u02C9', "¹")) +
   color_column() + labs(color  = "Column Position", shape = "Column Position") 
   #ggpubr::stat_pvalue_manual(data = output_time_transformed, label = "p_symbol", y.position = "max_y",
                            #  step.increase = 0.05, step.group.by = "position",  tip.length = 0.01, 
                             # xmin = "x_start", xmax = "x_end", bracket.nudge.y = 0.5,
                             # color = "position", show.legend = FALSE) + theme(legend.position = "right") 
+
+pdf('output/plots/oxygen.pdf', width = 9, height = 6)
+plot(oxgen_publication_plot)
+dev.off()
+
 
 # For the model data use the following table for latex conversion
 modelsummary::modelsummary(model_power, stars = TRUE, output = "model_table.csv")

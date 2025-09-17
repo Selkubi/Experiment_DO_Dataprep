@@ -44,7 +44,7 @@ theme_boxplot <- function() {
       axis.text.y = ggplot2::element_text(color = "black", size = 10),
       
       # Legend settings
-      legend.position = "bottom",
+      legend.position = "right",
       
       # Strip settings
       strip.placement = "outside",
