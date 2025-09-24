@@ -72,4 +72,6 @@ dev.off()
 
 
 # For the model data use the following table for latex conversion
-modelsummary::modelsummary(model_power, stars = TRUE, output = "model_table.csv")
+modelsummary::modelsummary(model_power, stars = TRUE)
+readr::write_csv(as.data.frame(pairwise_comparisons) %>%
+                   mutate(across(where(is.numeric), ~round(., 2))), "output/pairwise_comparisons.csv")
