@@ -29,7 +29,7 @@ ggplot(data_sum)+
 #the calculation is done using the Presens software but can also be manually calculated provided that the calibration equation is known.
 # In this case only the C2 values of the F replicate should show different results 
 #(all the F replicate values are recalcualted but C1 and C3 should be quite similar to original values since these had the correct calibration when measuring)
-# To exclude a holw set of sampling date use data_sum[!(Sample_Name == "S06"| Sample_Name=="S6.5"| Sample_Name == "S15.7")]
+# To exclude a whle set of sampling date use data_sum[!(Sample_Name == "S06"| Sample_Name=="S6.5"| Sample_Name == "S15.7")]
 
 data_sum <- data[,.(Oxygen = median(New_Calibration), Temp = median(Temp), Pressure = median(Pressure)), by = c("Column_no",  "day", "month", "Date", "Sample_Name")]
 data_sum[, c("replicate", "Column_Number") := tstrsplit(Column_no, "_")]
@@ -45,6 +45,7 @@ ggplot(data_subset)+
 
 # The plots are very similar, so we keep the re-calculated measurements
 # The S11 F_C3 is still an outlier since this was measured after opening the column. So we're excluding that
+data_subset <- data_subset[!(Sample_Name == "S11" & Column_no == "F_C3")]
 
 # Reverse plots sample_date~col_no 
 source("R/plotting_functinos.R")
