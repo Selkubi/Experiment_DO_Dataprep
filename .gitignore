@@ -9,3 +9,5 @@
 data/presense/*.csv
 data/presense/*.txt
 data/presense/*.xlsx
+output/plots/*.pdf
+output/*.csv
