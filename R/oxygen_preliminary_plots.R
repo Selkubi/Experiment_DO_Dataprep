@@ -51,6 +51,7 @@ data_subset <- data_subset[!(Sample_Name == "S11" & Column_no == "F_C3")]
 source("R/plotting_functinos.R")
 data_subset[, lapply(.SD, mean), .SDcols="Oxygen", by = c("Sample_Name", "Column_Number")]
 data_subset <- set_coloring_column(data_subset) # write a  new column for the differing color scheme
+data_subset <- data_subset[ !(Sample_Name == "S15")] # remove day 9 data since it is accepted as outlier per our discussion w Gabriel
 facet_names = c(C1 = "Column 1", C2 = "Column 2", C3 = "Column 3")
 
 
